@@ -1,11 +1,10 @@
-package com.example.core.data.network.interceptor
+package com.example.marvelapp.framework.network.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
-import javax.management.Query
 
 class AuthorizationInterceptor(
     private val publicKey: String,
