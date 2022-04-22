@@ -5,10 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.core.domain.model.Character
 import com.example.marvelapp.R
 import com.example.marvelapp.databinding.FragmentCharactersBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -16,6 +20,9 @@ class CharactersFragment : Fragment() {
 
     private var _binding: FragmentCharactersBinding? = null
     private val binding: FragmentCharactersBinding get() = _binding!!
+
+
+    private val viewModel: CharactersViewModel by viewModels()
 
     private val characterAdapter = CharactersAdapter()
 
@@ -34,23 +41,15 @@ class CharactersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initCharactersAdapter()
 
-        characterAdapter.submitList(
-            listOf(
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg"),
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg"),
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg"),
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg"),
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg"),
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg"),
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg"),
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg"),
-                Character("Spider Man", "https://www.portugalhomes.com/ckfinder/userfiles/images/jpg_01.jpg")
-            )
-        )
+        lifecycleScope.launch {
+            viewModel.charactersPagingData("").collect { pagingData ->
+                characterAdapter.submitData(pagingData)
+            }
+        }
     }
 
     private fun initCharactersAdapter() {
-        with(binding.recyclerCharacters){
+        with(binding.recyclerCharacters) {
             setHasFixedSize(true)
             adapter = characterAdapter
         }
