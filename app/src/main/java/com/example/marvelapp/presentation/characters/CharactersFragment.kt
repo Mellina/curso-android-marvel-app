@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import com.example.core.domain.model.Character
 import com.example.marvelapp.R
@@ -25,7 +27,7 @@ class CharactersFragment : Fragment() {
 
     private val viewModel: CharactersViewModel by viewModels()
 
-    private val characterAdapter = CharactersAdapter()
+    private lateinit var characterAdapter: CharactersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,13 +46,16 @@ class CharactersFragment : Fragment() {
         observeInitialLoadState()
 
         lifecycleScope.launch {
-            viewModel.charactersPagingData("").collect { pagingData ->
-                characterAdapter.submitData(pagingData)
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.charactersPagingData("").collect { pagingData ->
+                    characterAdapter.submitData(pagingData)
+                }
             }
         }
     }
 
     private fun initCharactersAdapter() {
+        characterAdapter = CharactersAdapter()
         with(binding.recyclerCharacters) {
             setHasFixedSize(true)
             adapter = characterAdapter
@@ -72,7 +77,13 @@ class CharactersFragment : Fragment() {
                             FLIPPER_CHILD_CHARACTERS
                         }
 
-                        is LoadState.Error -> FLIPPER_CHILD_ERROR
+                        is LoadState.Error -> {
+                            setShimmerVisibility(false)
+                            binding.includeViewErrorState.buttonRetry.setOnClickListener {
+                                characterAdapter.refresh()
+                            }
+                            FLIPPER_CHILD_ERROR
+                        }
                     }
             }
         }
