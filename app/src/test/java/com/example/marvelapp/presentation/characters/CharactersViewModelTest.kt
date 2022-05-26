@@ -2,6 +2,8 @@ package com.example.marvelapp.presentation.characters
 
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.bassul.testing.MainCoroutineRule
+import com.bassul.testing.model.CharacterFactory
 import com.example.core.domain.model.Character
 import com.example.core.usecase.GetCharactersUseCase
 import com.nhaarman.mockitokotlin2.any
@@ -13,9 +15,12 @@ import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -26,29 +31,25 @@ import java.lang.RuntimeException
 class CharactersViewModelTest {
 
     @ExperimentalCoroutinesApi
-    val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     @Mock
     lateinit var getCharacterUseCase: GetCharactersUseCase
 
     private lateinit var charactersViewModel: CharactersViewModel
 
+    private val charactersFactory = CharacterFactory()
+
     private val pagingDataCharacters = PagingData.from(
         listOf(
-            Character(
-                "3-D Man",
-                ""
-            ),
-            Character(
-                "A-Bomb (HAS)",
-                ""
-            )
+            charactersFactory.create(CharacterFactory.Hero.ThreeDMan),
+            charactersFactory.create(CharacterFactory.Hero.ABomb)
         )
     )
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
         charactersViewModel = CharactersViewModel(
             getCharacterUseCase
         )
