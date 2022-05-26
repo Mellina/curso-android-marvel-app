@@ -24,6 +24,7 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.6'
 
     // Paging3 Common
+    def paging_version = '3.0.1'
     implementation "androidx.paging:paging-common:$paging_version"
 
     // Javax Inject

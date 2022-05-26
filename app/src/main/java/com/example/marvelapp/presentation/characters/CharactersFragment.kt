@@ -11,8 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
-import com.example.core.domain.model.Character
-import com.example.marvelapp.R
 import com.example.marvelapp.databinding.FragmentCharactersBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -56,6 +54,7 @@ class CharactersFragment : Fragment() {
 
     private fun initCharactersAdapter() {
         characterAdapter = CharactersAdapter()
+
         with(binding.recyclerCharacters) {
             scrollToPosition(0)
             setHasFixedSize(true)

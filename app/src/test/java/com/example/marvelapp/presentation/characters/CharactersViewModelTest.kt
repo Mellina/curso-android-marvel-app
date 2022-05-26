@@ -1,0 +1,81 @@
+package com.example.marvelapp.presentation.characters
+
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.example.core.domain.model.Character
+import com.example.core.usecase.GetCharactersUseCase
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.whenever
+import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.junit.MockitoJUnitRunner
+
+@RunWith(MockitoJUnitRunner::class)
+class CharactersViewModelTest {
+
+    @ExperimentalCoroutinesApi
+    val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+
+    @Mock
+    lateinit var getCharacterUseCase: GetCharactersUseCase
+
+    private lateinit var charactersViewModel: CharactersViewModel
+
+    private val pagingDataCharacters = PagingData.from(
+        listOf(
+            Character(
+                "3-D Man",
+                ""
+            ),
+            Character(
+                "A-Bomb (HAS)",
+                ""
+            )
+        )
+    )
+
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+        charactersViewModel = CharactersViewModel(
+            getCharacterUseCase
+        )
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun `should validate the paging data object values when calling charactersPagingData`() =
+        runBlockingTest {
+            whenever(
+                getCharacterUseCase.invoke(
+                    any()
+                )
+            ).thenReturn(
+                flowOf(
+                    pagingDataCharacters
+                )
+            )
+
+            val expectedPagingData = pagingDataCharacters
+
+            val result = charactersViewModel.charactersPagingData("").first()
+
+            result.map { resultCharacter ->
+                expectedPagingData.map {
+                    assertEquals(it.name, resultCharacter.name)
+                }
+
+            }
+        }
+
+}
