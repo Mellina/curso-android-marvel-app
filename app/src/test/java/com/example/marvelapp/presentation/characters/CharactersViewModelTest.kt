@@ -9,6 +9,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -19,6 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import java.lang.RuntimeException
 
 @RunWith(MockitoJUnitRunner::class)
 class CharactersViewModelTest {
@@ -66,16 +68,26 @@ class CharactersViewModelTest {
                 )
             )
 
-            val expectedPagingData = pagingDataCharacters
+            val result = charactersViewModel.charactersPagingData("")
 
-            val result = charactersViewModel.charactersPagingData("").first()
+            assertEquals(1, result.count())
 
-            result.map { resultCharacter ->
-                expectedPagingData.map {
-                    assertEquals(it.name, resultCharacter.name)
-                }
+        }
 
-            }
+    @ExperimentalCoroutinesApi
+    @Test(expected = RuntimeException::class)
+    fun `should throw an exception when the calling to the use case returns an exception`() =
+        runBlockingTest {
+            whenever(
+                getCharacterUseCase.invoke(
+                    any()
+                )
+            ).thenThrow(
+                RuntimeException()
+            )
+
+           charactersViewModel.charactersPagingData("")
+
         }
 
 }
