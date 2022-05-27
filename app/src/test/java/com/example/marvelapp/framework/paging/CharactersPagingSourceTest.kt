@@ -17,6 +17,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import java.lang.Exception
+import java.lang.RuntimeException
 
 @RunWith(MockitoJUnitRunner::class)
 class CharactersPagingSourceTest {
@@ -68,6 +70,26 @@ class CharactersPagingSourceTest {
             result
         )
 
+    }
+
+    @Test
+    fun `should return a error load result when load is called`() = runBlockingTest{
+        //Arrange
+        val exception = RuntimeException()
+        whenever(remoteDataSource.fetchCharacters(any()))
+            .thenThrow(exception)
+
+        //Act
+        val result = charactersPagingSource.load(
+            PagingSource.LoadParams.Refresh(
+                null,
+                2,
+                false
+            )
+        )
+
+        //Assert
+        assertEquals(PagingSource.LoadResult.Error<Int, Character>(exception), result)
     }
 
 }
