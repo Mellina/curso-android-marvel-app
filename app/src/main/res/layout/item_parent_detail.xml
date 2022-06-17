@@ -3,32 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.detail.DetailFragment">
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/image_character"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:id="@+id/text_item_category"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:text="@string/details_comics_category" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_parent_detail"
+        android:id="@+id/recycler_child_detail"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
         android:clipToPadding="false"
-        android:padding="16dp"
-        android:scrollbars="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_character"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_parent_detail" />
-
+        tools:listitem="@layout/item_child_detail"
+        app:layout_constraintTop_toBottomOf="@+id/text_item_category" />
 </androidx.constraintlayout.widget.ConstraintLayout>
