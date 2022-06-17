@@ -9,6 +9,7 @@ import com.example.core.usecase.GetCharactersUseCase
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.count
@@ -71,7 +72,7 @@ class CharactersViewModelTest {
 
             val result = charactersViewModel.charactersPagingData("")
 
-            assertEquals(1, result.count())
+            assertNotNull(result.first())
 
         }
 
