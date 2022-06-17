@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.marvelapp.R
 
+
 class AboutFragment : Fragment() {
 
     override fun onCreateView(
@@ -16,4 +17,5 @@ class AboutFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_about, container, false)
     }
+
 }

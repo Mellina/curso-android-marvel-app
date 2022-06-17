@@ -7,7 +7,7 @@ project.afterEvaluate {
 }
 
 detekt {
-    toolVersion = "$detekt_version"
+    toolVersion = "$deteck_version"
     def inputDirFiles = []
     rootProject.subprojects.each { module ->
         inputDirFiles << "$module.projectDir/src/main/java"
@@ -23,11 +23,13 @@ detekt {
         }
         html {
             enabled = true
-            destination = file("$buildDir/reports/detekt/detekt.html")
+            destination = file("$buildDir/reports/detekt/detekt.xml")
         }
         txt {
             enabled = true
-            destination = file("$buildDir/reports/detekt/detekt.txt")
+            destination = file("$buildDir/reports/detekt/detekt.xml")
         }
     }
+
+
 }

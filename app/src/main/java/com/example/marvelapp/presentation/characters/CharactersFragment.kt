@@ -1,11 +1,11 @@
 package com.example.marvelapp.presentation.characters
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,8 +14,8 @@ import androidx.paging.LoadState
 import com.example.marvelapp.databinding.FragmentCharactersBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class CharactersFragment : Fragment() {
@@ -25,7 +25,7 @@ class CharactersFragment : Fragment() {
 
     private val viewModel: CharactersViewModel by viewModels()
 
-    private lateinit var charactersAdapter: CharactersAdapter
+    private lateinit var characterAdapter: CharactersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,20 +46,21 @@ class CharactersFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.charactersPagingData("").collect { pagingData ->
-                    charactersAdapter.submitData(pagingData)
+                    characterAdapter.submitData(pagingData)
                 }
             }
         }
     }
 
     private fun initCharactersAdapter() {
-        charactersAdapter = CharactersAdapter()
+        characterAdapter = CharactersAdapter()
+
         with(binding.recyclerCharacters) {
             scrollToPosition(0)
             setHasFixedSize(true)
-            adapter = charactersAdapter.withLoadStateFooter(
-                footer = CharactersLoadStateAdapter(
-                    charactersAdapter::retry
+            adapter = characterAdapter.withLoadStateFooter(
+                footer =  CharactersLoadStateAdapter(
+                    characterAdapter::retry
                 )
             )
         }
@@ -67,24 +68,27 @@ class CharactersFragment : Fragment() {
 
     private fun observeInitialLoadState() {
         lifecycleScope.launch {
-            charactersAdapter.loadStateFlow.collectLatest { loadState ->
-                binding.flipperCharacters.displayedChild = when (loadState.refresh) {
-                    is LoadState.Loading -> {
-                        setShimmerVisibility(true)
-                        FLIPPER_CHILD_LOADING
-                    }
-                    is LoadState.NotLoading -> {
-                        setShimmerVisibility(false)
-                        FLIPPER_CHILD_CHARACTERS
-                    }
-                    is LoadState.Error -> {
-                        setShimmerVisibility(false)
-                        binding.includeViewCharactersErrorState.buttonRetry.setOnClickListener {
-                            charactersAdapter.refresh()
+            characterAdapter.loadStateFlow.collect { loadState ->
+                binding.flipperCharacters.displayedChild =
+                    when (loadState.refresh) {
+                        is LoadState.Loading -> {
+                            setShimmerVisibility(true)
+                            FLIPPER_CHILD_LOADING
                         }
-                        FLIPPER_CHILD_ERROR
+
+                        is LoadState.NotLoading -> {
+                            setShimmerVisibility(false)
+                            FLIPPER_CHILD_CHARACTERS
+                        }
+
+                        is LoadState.Error -> {
+                            setShimmerVisibility(false)
+                            binding.includeViewErrorState.buttonRetry.setOnClickListener {
+                                characterAdapter.refresh()
+                            }
+                            FLIPPER_CHILD_ERROR
+                        }
                     }
-                }
             }
         }
     }
@@ -94,7 +98,9 @@ class CharactersFragment : Fragment() {
             isVisible = visibility
             if (visibility) {
                 startShimmer()
-            } else stopShimmer()
+            } else {
+                stopShimmer()
+            }
         }
     }
 

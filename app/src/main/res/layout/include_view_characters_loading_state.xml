@@ -12,12 +12,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/shimmer_layout_character_item" />
+        <include layout="@layout/shimmer_layout_character_item"/>
+        <include layout="@layout/shimmer_layout_character_item"/>
+        <include layout="@layout/shimmer_layout_character_item"/>
+        <include layout="@layout/shimmer_layout_character_item"/>
 
-        <include layout="@layout/shimmer_layout_character_item" />
-
-        <include layout="@layout/shimmer_layout_character_item" />
-
-        <include layout="@layout/shimmer_layout_character_item" />
     </LinearLayout>
 </com.facebook.shimmer.ShimmerFrameLayout>

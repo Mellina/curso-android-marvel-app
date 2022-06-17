@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.marvelapp.R
 
+
 class FavoritesFragment : Fragment() {
 
     override fun onCreateView(
@@ -16,4 +17,5 @@ class FavoritesFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorites, container, false)
     }
+
 }

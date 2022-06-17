@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
+//Ainda não é paging3
 abstract class UseCase<in P, R> {
 
     operator fun invoke(params: P): Flow<ResultStatus<R>> = flow {
@@ -15,10 +16,11 @@ abstract class UseCase<in P, R> {
     }
 
     protected abstract suspend fun doWork(params: P): ResultStatus<R>
+
 }
 
-abstract class PagingUseCase<in P, R : Any> {
-
+//Paging 3
+abstract class PagingUseCase<in P, R: Any> {
     operator fun invoke(params: P): Flow<PagingData<R>> = createFlowObservable(params)
 
     protected abstract fun createFlowObservable(params: P): Flow<PagingData<R>>

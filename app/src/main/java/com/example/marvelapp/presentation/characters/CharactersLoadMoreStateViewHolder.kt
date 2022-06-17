@@ -15,14 +15,12 @@ class CharactersLoadMoreStateViewHolder(
     private val binding = ItemCharacterLoadMoreStateBinding.bind(itemView)
     private val progressBarLoadingMore = binding.progressLoadingMore
     private val textTryAgainMessage = binding.textTryAgain.also {
-        it.setOnClickListener {
-            retry()
-        }
+        it.setOnClickListener { retry() }
     }
 
-    fun bind(loadSate: LoadState) {
-        progressBarLoadingMore.isVisible = loadSate is LoadState.Loading
-        textTryAgainMessage.isVisible = loadSate is LoadState.Error
+    fun bind(loadState: LoadState) {
+        progressBarLoadingMore.isVisible = loadState is LoadState.Loading
+        textTryAgainMessage.isVisible = loadState is LoadState.Error
     }
 
     companion object {

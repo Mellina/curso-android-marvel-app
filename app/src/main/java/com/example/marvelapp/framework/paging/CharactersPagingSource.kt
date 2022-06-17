@@ -6,6 +6,7 @@ import com.example.core.data.repository.CharactersRemoteDataSource
 import com.example.core.domain.model.Character
 import com.example.marvelapp.framework.network.response.DataWrapperResponse
 import com.example.marvelapp.framework.network.response.toCharacterModel
+import java.lang.Exception
 
 class CharactersPagingSource(
     private val remoteDataSource: CharactersRemoteDataSource<DataWrapperResponse>,
@@ -31,11 +32,14 @@ class CharactersPagingSource(
             val totalCharacters = response.data.total
 
             LoadResult.Page(
-                data = response.data.results.map { it.toCharacterModel() },
+                data = response.data.results.map {
+                    it.toCharacterModel()
+                },
                 prevKey = null,
                 nextKey = if (responseOffset < totalCharacters) {
                     responseOffset + LIMIT
                 } else null
+
             )
         } catch (exception: Exception) {
             LoadResult.Error(exception)

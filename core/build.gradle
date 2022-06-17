@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'kotlin'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 java {
@@ -24,6 +24,7 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.6'
 
     // Paging3 Common
+    def paging_version = '3.0.1'
     implementation "androidx.paging:paging-common:$paging_version"
 
     // Javax Inject
@@ -32,5 +33,6 @@ dependencies {
     // Coroutines core
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
-    testImplementation project(":testing")
+    testImplementation project(':testing')
+
 }

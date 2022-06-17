@@ -10,12 +10,12 @@ import com.example.marvelapp.databinding.ItemCharacterBinding
 
 class CharactersViewHolder(
     itemCharacterBinding: ItemCharacterBinding
-) : RecyclerView.ViewHolder(itemCharacterBinding.root) {
+): RecyclerView.ViewHolder(itemCharacterBinding.root) {
 
     private val textName = itemCharacterBinding.textName
     private val imageCharacter = itemCharacterBinding.imageCharacter
 
-    fun bind(character: Character) {
+    fun bind(character: Character){
         textName.text = character.name
         Glide.with(itemView)
             .load(character.imageUrl)
@@ -23,8 +23,8 @@ class CharactersViewHolder(
             .into(imageCharacter)
     }
 
-    companion object {
-        fun create(parent: ViewGroup): CharactersViewHolder {
+    companion object{
+        fun create(parent: ViewGroup):CharactersViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val itemBinding = ItemCharacterBinding.inflate(inflater, parent, false)
             return CharactersViewHolder(itemBinding)
