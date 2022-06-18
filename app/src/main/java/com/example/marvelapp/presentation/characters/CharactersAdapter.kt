@@ -3,13 +3,15 @@ package com.example.marvelapp.presentation.characters
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import com.example.core.domain.model.Character
+import com.example.marvelapp.util.OnCharacterItemClick
 
-class CharactersAdapter : PagingDataAdapter<Character, CharactersViewHolder>(diffCallback) {
+class CharactersAdapter(
+    private val onItemClick: OnCharacterItemClick
+) : PagingDataAdapter<Character, CharactersViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersViewHolder {
-        return CharactersViewHolder.create(parent)
+        return CharactersViewHolder.create(parent, onItemClick)
     }
 
     override fun onBindViewHolder(holder: CharactersViewHolder, position: Int) {

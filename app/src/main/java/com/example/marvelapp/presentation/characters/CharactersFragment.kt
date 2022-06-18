@@ -10,8 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.example.marvelapp.databinding.FragmentCharactersBinding
+import com.example.marvelapp.presentation.detail.DetailViewArg
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -53,13 +56,25 @@ class CharactersFragment : Fragment() {
     }
 
     private fun initCharactersAdapter() {
-        characterAdapter = CharactersAdapter()
+        characterAdapter = CharactersAdapter { character, view ->
+            val extras = FragmentNavigatorExtras(
+                view to character.name
+            )
+
+            val directions = CharactersFragmentDirections
+                .actionCharactersFragmentToDetailFragment(
+                    character.name,
+                    DetailViewArg(character.name, character.imageUrl)
+                )
+
+            findNavController().navigate(directions, extras)
+        }
 
         with(binding.recyclerCharacters) {
             scrollToPosition(0)
             setHasFixedSize(true)
             adapter = characterAdapter.withLoadStateFooter(
-                footer =  CharactersLoadStateAdapter(
+                footer = CharactersLoadStateAdapter(
                     characterAdapter::retry
                 )
             )
