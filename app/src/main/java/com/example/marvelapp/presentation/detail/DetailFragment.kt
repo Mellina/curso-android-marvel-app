@@ -1,6 +1,5 @@
 package com.example.marvelapp.presentation.detail
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
-import com.bumptech.glide.Glide
 import com.example.marvelapp.R
-import com.example.marvelapp.databinding.FragmentCharactersBinding
 import com.example.marvelapp.databinding.FragmentDetailBinding
+import com.example.marvelapp.framework.imageloader.GlideImageLoader
+import com.example.marvelapp.framework.imageloader.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
@@ -21,6 +21,9 @@ class DetailFragment : Fragment() {
     private val binding: FragmentDetailBinding get() = _binding!!
 
     private val args by navArgs<DetailFragmentArgs>()
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,10 +41,7 @@ class DetailFragment : Fragment() {
         val detailViewArgs = args.detailViewArg
         binding.imageCharacter.run {
             transitionName = detailViewArgs.name
-            Glide.with(context)
-                .load(detailViewArgs.imageUrl)
-                .fallback(R.drawable.ic_img_loading_error)
-                .into(this)
+            imageLoader.load(this, detailViewArgs.imageUrl, R.drawable.ic_img_loading_error)
         }
 
         setSharedElementTransitionOnEnter()
