@@ -108,7 +108,6 @@ class CharactersFragment : Fragment() {
                             }
                             FLIPPER_CHILD_ERROR
                         }
-
                     }
             }
         }
