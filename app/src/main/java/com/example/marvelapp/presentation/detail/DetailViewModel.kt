@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.domain.model.Comic
 import com.example.core.usecase.GetComicsUseCase
 import com.example.core.usecase.base.ResultStatus
+import com.example.marvelapp.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -26,10 +27,21 @@ class DetailViewModel @Inject constructor(
 
     private fun kotlinx.coroutines.flow.Flow<ResultStatus<List<Comic>>>.watchStatus() =
         viewModelScope.launch {
-            collect { result ->
-                _uiState.value = when (result) {
+            collect { status ->
+                _uiState.value = when (status) {
                     ResultStatus.Loading -> UIState.Loading
-                    is ResultStatus.Success -> UIState.Success(result.data)
+                    is ResultStatus.Success -> {
+                        val detailChildList = status.data.map {
+                            DetailChildViewEntities(id = it.id, it.imageUrl)
+                        }
+                        val detailParentList = listOf(
+                            DetailParentViewEntities(
+                                R.string.details_comics_category,
+                                detailChildList
+                            )
+                        )
+                        UIState.Success(detailParentList)
+                    }
                     is ResultStatus.Error -> UIState.Error
                 }
 
@@ -38,7 +50,7 @@ class DetailViewModel @Inject constructor(
 
     sealed class UIState {
         object Loading : UIState()
-        data class Success(val comics: List<Comic>) : UIState()
+        data class Success(val detailParentList: List<DetailParentViewEntities>) : UIState()
         object Error : UIState()
 
     }
