@@ -14,7 +14,7 @@ class DataWrapperResponseFactory {
             total = 2,
             results = listOf(
                 CharacterResponse(
-                    id = "1512315",
+                    id = 1512315,
                     name = "3-D Man",
                     thumbnail = ThumbnailResponse(
                         path = "",

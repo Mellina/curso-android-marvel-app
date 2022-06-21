@@ -1,7 +1,9 @@
+/*
 package com.example.marvelapp.remote
 
 import com.example.core.data.repository.CharactersRemoteDataSource
 import com.example.core.domain.model.CharacterPaging
+import com.example.core.domain.model.Comic
 import com.example.marvelapp.framework.network.MarvelApi
 import com.example.marvelapp.framework.network.response.DataWrapperResponse
 import com.example.marvelapp.framework.network.response.toCharacterModel
@@ -23,4 +25,5 @@ class RetrofitCharactersDataSource @Inject constructor(
             characters
         )
     }
-}
+
+}*/

@@ -1,10 +1,12 @@
 package com.example.marvelapp.presentation.detail
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.example.marvelapp.R
@@ -21,6 +23,8 @@ class DetailFragment : Fragment() {
     private val binding: FragmentDetailBinding get() = _binding!!
 
     private val args by navArgs<DetailFragmentArgs>()
+
+    private val viewModel: DetailViewModel by viewModels()
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -45,6 +49,18 @@ class DetailFragment : Fragment() {
         }
 
         setSharedElementTransitionOnEnter()
+
+        viewModel.uiState.observe(viewLifecycleOwner){ uiState ->
+            val log = when(uiState){
+                    DetailViewModel.UIState.Loading -> "Loading..."
+                    is DetailViewModel.UIState.Success -> uiState.comics.toString()
+                    is DetailViewModel.UIState.Error -> "Error"
+            }
+            Log.d("LOG_STATE", ""+log)
+        }
+
+        viewModel.getComics(detailViewArgs.characterId)
+
     }
 
     private fun setSharedElementTransitionOnEnter() {
