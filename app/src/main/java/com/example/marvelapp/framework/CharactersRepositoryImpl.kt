@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import com.example.core.data.repository.CharactersRemoteDataSource
 import com.example.core.data.repository.CharactersRepository
 import com.example.core.domain.model.Character
+import com.example.core.domain.model.Comic
 import com.example.marvelapp.framework.paging.CharactersPagingSource
 import javax.inject.Inject
 
@@ -13,4 +14,10 @@ class CharactersRepositoryImpl @Inject constructor(
     override fun getCharacters(query: String): PagingSource<Int, Character> {
         return CharactersPagingSource(remoteDataSource, query)
     }
+
+    override suspend fun getComic(characterId: Int): List<Comic> {
+        return remoteDataSource.fetchComics(characterId)
+    }
+
+
 }
