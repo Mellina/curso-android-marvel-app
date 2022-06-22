@@ -89,8 +89,7 @@ class CharactersFragment : Fragment() {
     private fun observeInitialLoadState() {
         lifecycleScope.launch {
             characterAdapter.loadStateFlow.collect { loadState ->
-                binding.flipperCharacters.displayedChild =
-                    when (loadState.refresh) {
+                binding.flipperCharacters.displayedChild = when (loadState.refresh) {
                         is LoadState.Loading -> {
                             setShimmerVisibility(true)
                             FLIPPER_CHILD_LOADING
@@ -104,7 +103,7 @@ class CharactersFragment : Fragment() {
                         is LoadState.Error -> {
                             setShimmerVisibility(false)
                             binding.includeViewErrorState.buttonRetry.setOnClickListener {
-                                characterAdapter.refresh()
+                                characterAdapter.retry()
                             }
                             FLIPPER_CHILD_ERROR
                         }

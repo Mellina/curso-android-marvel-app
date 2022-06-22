@@ -31,8 +31,7 @@ class DetailChildAdapter(
 
         fun bind(detailChildViewEntities: DetailChildViewEntities) {
             imageLoader.load(imageCategory,
-                detailChildViewEntities.imageUrl,
-                R.drawable.ic_img_loading_error)
+                detailChildViewEntities.imageUrl)
         }
 
         companion object {
