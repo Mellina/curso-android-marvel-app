@@ -4,8 +4,7 @@ import androidx.paging.PagingSource
 import com.bassul.testing.MainCoroutineRule
 import com.bassul.testing.model.CharacterFactory
 import com.example.core.data.repository.CharactersRemoteDataSource
-import com.example.marvelapp.factory.response.DataWrapperResponseFactory
-import com.example.marvelapp.framework.network.response.DataWrapperResponse
+import com.example.marvelapp.factory.response.CharacterPagingFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
@@ -17,22 +16,21 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import java.lang.Exception
 import java.lang.RuntimeException
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class CharactersPagingSourceTest {
 
-    @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
     @Mock
-    lateinit var  remoteDataSource: CharactersRemoteDataSource<DataWrapperResponse>
+    lateinit var  remoteDataSource: CharactersRemoteDataSource
 
     private lateinit var charactersPagingSource: CharactersPagingSource
 
-    private val dataWrapperResponseFactory = DataWrapperResponseFactory()
+    private val dataWrapperResponseFactory = CharacterPagingFactory()
 
     private val characterFactory = CharacterFactory()
     @Before
