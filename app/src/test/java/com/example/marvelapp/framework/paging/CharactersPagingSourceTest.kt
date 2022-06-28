@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +40,7 @@ class CharactersPagingSourceTest {
     }
 
     @Test
-    fun `should return a success load result when load is called`() = runBlockingTest{
+    fun `should return a success load result when load is called`() = runTest{
         //Arrange
         whenever(remoteDataSource.fetchCharacters(any()))
             .thenReturn(dataWrapperResponseFactory.create())
@@ -71,7 +72,7 @@ class CharactersPagingSourceTest {
     }
 
     @Test
-    fun `should return a error load result when load is called`() = runBlockingTest{
+    fun `should return a error load result when load is called`() = runTest{
         //Arrange
         val exception = RuntimeException()
         whenever(remoteDataSource.fetchCharacters(any()))

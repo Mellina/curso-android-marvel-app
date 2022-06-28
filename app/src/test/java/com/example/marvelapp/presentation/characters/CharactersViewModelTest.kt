@@ -1,7 +1,6 @@
 package com.example.marvelapp.presentation.characters
 
 import androidx.paging.PagingData
-import androidx.paging.map
 import com.bassul.testing.MainCoroutineRule
 import com.bassul.testing.model.CharacterFactory
 import com.example.core.domain.model.Character
@@ -15,10 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -58,7 +54,7 @@ class CharactersViewModelTest {
 
     @Test
     fun `should validate the paging data object values when calling charactersPagingData`() =
-        runBlockingTest {
+        runTest {
             whenever(
                 getCharacterUseCase.invoke(
                     any()
@@ -77,7 +73,7 @@ class CharactersViewModelTest {
 
     @Test(expected = RuntimeException::class)
     fun `should throw an exception when the calling to the use case returns an exception`() =
-        runBlockingTest {
+        runTest {
             whenever(
                 getCharacterUseCase.invoke(
                     any()
