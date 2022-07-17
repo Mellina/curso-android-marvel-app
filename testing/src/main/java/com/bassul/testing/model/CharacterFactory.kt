@@ -5,14 +5,16 @@ import com.example.core.domain.model.Character
 class CharacterFactory {
 
     fun create(hero: Hero) = when(hero) {
-        Hero.ThreeDMan -> Character(
-            "3-D Man",
-            ".jpg"
+        Hero.ThreeDMan ->Character(
+            id = 1512315,
+            name = "3-D Man",
+            imageUrl = ""
         )
-        Hero.ABomb -> Character(
-            "A-Bomb (HAS)",
-            ".jpg"
-        )
+        Hero.ABomb ->  Character(
+                id = 1000315,
+                name = "A-Bomb (HAS)",
+                imageUrl = ""
+            )
     }
 
     sealed class Hero {
