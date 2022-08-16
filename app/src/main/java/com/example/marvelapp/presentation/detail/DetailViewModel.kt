@@ -5,12 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.core.domain.model.Comic
-import com.example.core.domain.model.Event
 import com.example.core.usecase.AddFavoriteUseCase
 import com.example.core.usecase.GetCharacterCategoriesUseCase
-import com.example.core.usecase.base.ResultStatus
 import com.example.marvelapp.R
+import com.example.marvelapp.extensions.watchStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,61 +34,71 @@ class DetailViewModel @Inject constructor(
             GetCharacterCategoriesUseCase.GetCharacterCategoriesParams(
                 characterId
             )
-        ).watchStatus()
+        ).watchStatus(loading = {
+            _uiState.value = UIState.Loading
+        }, success = { data ->
+
+            val detailParentList = mutableListOf<DetailParentViewEntities>()
+
+            val comics = data.first
+            if (comics.isNotEmpty()) {
+                comics.map {
+                    DetailChildViewEntities(
+                        it.id,
+                        it.imageUrl
+                    )
+                }.also {
+                    detailParentList.add(
+                        DetailParentViewEntities(
+                            R.string.details_comics_category,
+                            it
+                        )
+                    )
+                }
+            }
+
+            val events = data.second
+            if (events.isNotEmpty()) {
+                events.map {
+                    DetailChildViewEntities(it.id, it.imageUrl)
+                }.also {
+                    detailParentList.add(
+                        DetailParentViewEntities(
+                            R.string.details_events_category,
+                            it
+                        )
+                    )
+                }
+            }
+
+            _uiState.value = if (detailParentList.isNotEmpty()) {
+                UIState.Success(detailParentList)
+            } else {
+                UIState.Empty
+            }
+        }, error = {
+            _uiState.value = UIState.Error
+        })
     }
 
-    private fun kotlinx.coroutines.flow.Flow<ResultStatus<Pair<List<Comic>, List<Event>>>>.watchStatus() =
-        viewModelScope.launch {
-            collect { status ->
-                _uiState.value = when (status) {
-                    ResultStatus.Loading -> UIState.Loading
-                    is ResultStatus.Success -> {
+    fun updateFavorite(detailViewArg: DetailViewArg) = viewModelScope.launch {
+        detailViewArg.run {
+            addFavoriteUseCase.invoke(
+                AddFavoriteUseCase.Params(characterId, name, imageUrl)
+            ).watchStatus(
+                loading = {
+                    _favoriteUiState.value = FavoriteUiState.Loading
+                },
+                success = {
+                    _favoriteUiState.value =
+                        FavoriteUiState.FavoriteIcon(R.drawable.ic_favorite_checked)
+                },
+                error = {
 
-                        val detailParentList = mutableListOf<DetailParentViewEntities>()
-
-                        val comics = status.data.first
-                        if (comics.isNotEmpty()) {
-                            comics.map {
-                                DetailChildViewEntities(
-                                    it.id,
-                                    it.imageUrl
-                                )
-                            }.also {
-                                detailParentList.add(
-                                    DetailParentViewEntities(
-                                        R.string.details_comics_category,
-                                        it
-                                    )
-                                )
-                            }
-                        }
-
-                        val events = status.data.second
-                        if (events.isNotEmpty()) {
-                            events.map {
-                                DetailChildViewEntities(it.id, it.imageUrl)
-                            }.also {
-                                detailParentList.add(
-                                    DetailParentViewEntities(
-                                        R.string.details_events_category,
-                                        it
-                                    )
-                                )
-                            }
-                        }
-
-                        if (detailParentList.isNotEmpty()) {
-                            UIState.Success(detailParentList)
-                        } else {
-                            UIState.Empty
-                        }
-
-                    }
-                    is ResultStatus.Error -> UIState.Error
                 }
-
-            }
+            )
         }
+    }
 
     sealed class UIState {
         object Loading : UIState()
@@ -100,8 +108,8 @@ class DetailViewModel @Inject constructor(
     }
 
     sealed class FavoriteUiState {
-        object Loading: FavoriteUiState()
-        class FavoriteIcon(@DrawableRes val icon: Int): FavoriteUiState()
+        object Loading : FavoriteUiState()
+        class FavoriteIcon(@DrawableRes val icon: Int) : FavoriteUiState()
     }
 
 }
