@@ -49,7 +49,7 @@ class DetailFragment : Fragment() {
         setSharedElementTransitionOnEnter()
 
         loadCategoriesAndObserverUiState(detailViewArgs)
-        setandObserveFavoriteUiState(detailViewArgs)
+        setAndObserveFavoriteUiState(detailViewArgs)
 
     }
 
@@ -82,21 +82,27 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun setandObserveFavoriteUiState(detailViewArgs: DetailViewArg) {
-        binding.imageFavoriteIcon.setOnClickListener {
-            viewModel.favorite.update(detailViewArgs)
-        }
+    private fun setAndObserveFavoriteUiState(detailViewArgs: DetailViewArg) {
 
-        viewModel.favorite.state.observe(viewLifecycleOwner) { uiState ->
-            binding.flipperFavorite.displayedChild = when (uiState) {
-                FavoriteUiActionStateLiveData.UiState.Loading -> FLIPPER_FAVORITE_CHILD_POSITION_LOADING
-                is FavoriteUiActionStateLiveData.UiState.Icon -> {
-                    binding.imageFavoriteIcon.setImageResource(uiState.icon)
-                    FLIPPER_FAVORITE_CHILD_POSITION_IMAGE
-                }
-                is FavoriteUiActionStateLiveData.UiState.Error -> {
-                    showShortToast(uiState.messageResId)
-                    FLIPPER_FAVORITE_CHILD_POSITION_IMAGE
+        viewModel.favorite.run {
+
+            checkFavorite(detailViewArgs.characterId)
+
+            binding.imageFavoriteIcon.setOnClickListener {
+                update(detailViewArgs)
+            }
+
+            state.observe(viewLifecycleOwner) { uiState ->
+                binding.flipperFavorite.displayedChild = when (uiState) {
+                    FavoriteUiActionStateLiveData.UiState.Loading -> FLIPPER_FAVORITE_CHILD_POSITION_LOADING
+                    is FavoriteUiActionStateLiveData.UiState.Icon -> {
+                        binding.imageFavoriteIcon.setImageResource(uiState.icon)
+                        FLIPPER_FAVORITE_CHILD_POSITION_IMAGE
+                    }
+                    is FavoriteUiActionStateLiveData.UiState.Error -> {
+                        showShortToast(uiState.messageResId)
+                        FLIPPER_FAVORITE_CHILD_POSITION_IMAGE
+                    }
                 }
             }
         }
