@@ -48,7 +48,8 @@ class CharactersViewModelTest {
     @Before
     fun setUp() {
         charactersViewModel = CharactersViewModel(
-            getCharacterUseCase
+            getCharacterUseCase,
+            mainCoroutineRule.testDispatcherProvider
         )
     }
 
@@ -86,4 +87,15 @@ class CharactersViewModelTest {
 
         }
 
+    @Test
+    fun `should notify favorite_uiState with filled favorite icon when current icon is unchecked`() =
+        runTest {
+
+        }
+
+    @Test
+    fun `should call remove and notify favorite_uiState with filled favorite icon when current icon is checked`() =
+        runTest {
+            // TODO: Implement test
+        }
 }
