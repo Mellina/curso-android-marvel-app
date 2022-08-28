@@ -105,6 +105,8 @@ class FavoriteUiActionStateLiveData(
         }
     }
 
+
+
     sealed class UiState {
         object Loading : UiState()
         data class Icon(@DrawableRes val icon: Int) : UiState()
