@@ -1,12 +1,10 @@
-package com.example.marvelapp.presentation.characters
+package com.example.marvelapp.presentation.characters.adapters
 
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
-import kotlinx.coroutines.NonDisposableHandle
-import kotlinx.coroutines.NonDisposableHandle.parent
 
-class CharactersLoadStateAdapter(
+class CharactersLoadMoreStateAdapter(
     private val retry: () -> Unit
 ) : LoadStateAdapter<CharactersLoadMoreStateViewHolder>() {
 
