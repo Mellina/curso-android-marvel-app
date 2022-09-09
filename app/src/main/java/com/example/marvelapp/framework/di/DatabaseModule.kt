@@ -25,4 +25,7 @@ object DatabaseModule {
 
     @Provides
     fun provideFavoriteDao(appDataBase: AppDataBase) = appDataBase.favoriteDao()
+
+    @Provides
+    fun provideCharacterDao(appDataBase: AppDataBase) = appDataBase.characterDao()
 }
