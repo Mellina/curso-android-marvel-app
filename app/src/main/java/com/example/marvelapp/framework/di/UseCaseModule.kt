@@ -1,10 +1,21 @@
 package com.example.marvelapp.framework.di
 
-import com.example.core.data.repository.FavoritesLocalDataSource
-import com.example.core.usecase.*
+import com.example.core.usecase.AddFavoriteUseCase
+import com.example.core.usecase.AddFavoriteUseCaseImpl
+import com.example.core.usecase.GetCharacterCategoriesUseCase
+import com.example.core.usecase.GetCharacterCategoriesUseCaseImpl
+import com.example.core.usecase.GetCharactersSortingUseCase
+import com.example.core.usecase.GetCharactersSortingUseCaseImpl
+import com.example.core.usecase.GetCharactersUseCase
+import com.example.core.usecase.GetCharactersUseCaseImpl
+import com.example.core.usecase.GetFavoritesUseCase
+import com.example.core.usecase.GetFavoritesUseCaseImpl
+import com.example.core.usecase.RemoveFavoriteUseCase
+import com.example.core.usecase.RemoveFavoriteUseCaseImpl
+import com.example.core.usecase.SaveCharacterSortingUseCase
+import com.example.core.usecase.SaveCharacterSortingUseCaseImpl
 import com.example.core.usecase.base.CheckFavoriteUseCase
 import com.example.core.usecase.base.CheckFavoriteUseCaseImpl
-import com.example.marvelapp.framework.local.RoomFavoritesDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -31,4 +42,10 @@ interface UseCaseModule {
 
     @Binds
     fun bindGetFavoritesUseCase(useCase: GetFavoritesUseCaseImpl): GetFavoritesUseCase
+
+    @Binds
+    fun bindGetCharactersSortingUseCase(useCase: GetCharactersSortingUseCaseImpl): GetCharactersSortingUseCase
+
+    @Binds
+    fun bindSaveCharactersSortingUseCase(useCase: SaveCharacterSortingUseCaseImpl): SaveCharacterSortingUseCase
 }
